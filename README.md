@@ -1,22 +1,37 @@
-# Unblocker
+# Unblocker — Get Unstuck in 15 Minutes for $15
 
+**Live app:** https://unblocker-lghh.onrender.com
+
+> Ever spend 4 hours on a bug that took someone else 5 minutes to spot? Unblocker fixes that.
 
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/jdkautomations/unblocker)
-> **Uber for 15-minute bug fixes.** Post a $15 bounty, get a vetted expert on a screen-share session instantly.
-
-Maestro College Capstone Project — Built with Python/FastAPI, Supabase, Daily.co, and Stripe.
 
 ---
 
-## The Concept
+## What is Unblocker?
 
-When developers are stuck on a bug, they don't want to wait days on Upwork or Fiverr. **Unblocker** lets you:
-1. Paste your error and post a $15 bounty
-2. A vetted expert claims it and instantly opens a screen-share video room
-3. Bug gets fixed in ~15 minutes
-4. Payment is auto-released to the expert (80%), Unblocker keeps 20%
+Unblocker is a **micro bug-bounty marketplace** for developers. Post your bug for $15, and another developer claims it, jumps on a quick video call with you, and helps you get unblocked — goal is 15 minutes.
 
-## Tech Stack ($0 to Launch)
+No subscription. No waiting days. No $150/hr consultant. Just $15 to get back to building.
+
+---
+
+## How It Works
+
+1. **Post your bug** — paste your error message, language/framework, and bug title
+2. **Authorize $15** via Stripe
+3. **A dev claims your bounty** — they see it on the open bounties board
+4. **Join a video call** via Daily.co and get unblocked
+
+---
+
+## Why $15?
+
+Low enough that it's a no-brainer when you're stuck. High enough to motivate another developer to spend 15 focused minutes helping you. The second set of eyes is almost always worth it.
+
+---
+
+## Tech Stack
 
 | Layer | Tool | Cost |
 |-------|------|------|
@@ -25,74 +40,62 @@ When developers are stuck on a bug, they don't want to wait days on Upwork or Fi
 | Hosting | Render.com | Free tier |
 | Database | Supabase (PostgreSQL) | Free tier |
 | Video | Daily.co | 10k free mins/mo |
-| Payments | Stripe Connect | Free setup |
+| Payments | Stripe | Free setup |
 
-## Project Structure
+---
 
-```
-unblocker/
-├── main.py                 # FastAPI app - all routes
-├── requirements.txt        # Python dependencies
-├── .env.example            # Environment variable template
-├── supabase_schema.sql     # Run this in Supabase SQL Editor
-└── templates/
-    └── index.html          # Jinja2 + HTMX frontend
-```
+## Running Locally
 
-## 5-Phase Build Plan
-
-| Phase | Goal | Tech |
-|-------|------|------|
-| 1 | Hello World FastAPI site | Python, FastAPI |
-| 2 | Supabase bounties table | PostgreSQL |
-| 3 | Job board UI with HTMX | Jinja2, HTMX |
-| 4 | Video room on claim | Daily.co API |
-| 5 | $15 payment escrow | Stripe Connect |
-
-## Setup
-
-### 1. Clone & install
 ```bash
 git clone https://github.com/jdkautomations/unblocker.git
 cd unblocker
 python -m venv venv
-venv\Scripts\activate  # Windows
-source venv/bin/activate  # Mac/Linux
+source venv/bin/activate  # Windows: venv\Scripts\activate
 pip install -r requirements.txt
-```
-
-### 2. Set up environment variables
-```bash
 cp .env.example .env
-# Fill in your Supabase, Stripe, and Daily.co keys
-```
-
-### 3. Set up Supabase database
-- Create a free project at [supabase.com](https://supabase.com)
-- Open the SQL Editor and run `supabase_schema.sql`
-- Copy your Project URL and anon key into `.env`
-
-### 4. Run the app
-```bash
+# Fill in your keys, then:
 fastapi dev main.py
 ```
-Visit: [http://127.0.0.1:8000](http://127.0.0.1:8000)
+
+Visit: http://127.0.0.1:8000
+
+---
+
+## Environment Variables
+
+| Variable | Where to get it |
+|---|---|
+| `SUPABASE_URL` | supabase.com → Project Settings → API |
+| `SUPABASE_KEY` | supabase.com → Project Settings → API (anon key) |
+| `DAILY_API_KEY` | daily.co → Dashboard → Developers |
+| `STRIPE_SECRET_KEY` | dashboard.stripe.com → Developers → API Keys |
+| `STRIPE_WEBHOOK_SECRET` | dashboard.stripe.com → Webhooks |
+
+---
 
 ## API Routes
 
 | Method | Route | Description |
 |--------|-------|-------------|
-| GET | `/` | Home page - list open bounties |
+| GET | `/` | Home — list open bounties |
 | POST | `/post-bug` | Submit a new bug bounty |
-| POST | `/claim/{id}` | Expert claims a bounty, creates video room |
-| POST | `/resolve/{id}` | Resolve bug, release Stripe payment |
-
-## Getting Your API Keys
-
-- **Supabase**: [supabase.com](https://supabase.com) → New Project → Settings → API
-- **Stripe**: [stripe.com](https://stripe.com) → Dashboard → Developers → API Keys
-- **Daily.co**: [daily.co](https://daily.co) → Dashboard → Developers → API Keys
+| POST | `/claim/{id}` | Claim a bounty, opens video room |
+| POST | `/resolve/{id}` | Resolve bug, release payment |
 
 ---
 
-*Built for Maestro College Capstone — Showcasing FastAPI, real-time databases, video APIs, and payment processing.*
+## Project Structure
+
+```
+unblocker/
+├── main.py              # FastAPI app — all routes
+├── requirements.txt     # Python dependencies
+├── render.yaml          # One-click Render deploy config
+├── .env.example         # Environment variable template
+└── templates/
+    └── index.html       # Jinja2 + HTMX frontend
+```
+
+---
+
+Built with FastAPI, Supabase, Stripe, and Daily.co. Deployed on Render.
