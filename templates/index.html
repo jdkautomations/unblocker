@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unblocker - Instant Bug Fix Marketplace</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <nav class="bg-blue-700 text-white p-4 shadow">
+        <h1 class="text-2xl font-extrabold">Unblocker</h1>
+        <p class="text-sm opacity-80">Get unstuck in 15 minutes for $15</p>
+    </nav>
+
+    <div class="max-w-4xl mx-auto p-6 space-y-10">
+
+        <!-- POST A BOUNTY -->
+        <section class="bg-white p-6 rounded-xl shadow">
+            <h2 class="text-2xl font-bold mb-4 text-blue-700">Post a Bug Bounty</h2>
+            <form action="/post-bug" method="POST" class="space-y-4">
+                <input
+                    type="text" name="title"
+                    placeholder="Bug Title (e.g. TypeError: cannot read property)" required
+                    class="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+                <input
+                    type="text" name="language"
+                    placeholder="Language / Framework (e.g. Python, React)" required
+                    class="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+                <textarea
+                    name="description" rows="4"
+                    placeholder="Paste your full error message or describe the bug..." required
+                    class="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"></textarea>
+                <button
+                    type="submit"
+                    class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition">
+                    Authorize $15 &amp; Post Bounty
+                </button>
+            </form>
+        </section>
+
+        <!-- OPEN BOUNTIES -->
+        <section>
+            <h2 class="text-2xl font-bold mb-4 text-gray-800">Open Bounties</h2>
+
+            {% if bounties %}
+            <div class="space-y-4">
+                {% for bug in bounties %}
+                <div class="bg-white p-6 rounded-xl shadow hover:shadow-md transition">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-900">{{ bug.title }}</h3>
+                            <span class="inline-block mt-1 bg-blue-100 text-blue-700 text-xs font-semibold px-3 py-1 rounded-full">
+                                {{ bug.language }}
+                            </span>
+                        </div>
+                        <span class="text-2xl font-extrabold text-green-600">$15</span>
+                    </div>
+                    <pre class="mt-3 bg-gray-50 border border-gray-200 p-3 rounded-lg text-sm overflow-x-auto whitespace-pre-wrap">{{ bug.description }}</pre>
+                    <div id="action-{{ bug.id }}" class="mt-4">
+                        <button
+                            hx-post="/claim/{{ bug.id }}"
+                            hx-target="#action-{{ bug.id }}"
+                            hx-swap="innerHTML"
+                            class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-5 rounded-lg transition">
+                            Claim Bounty &rarr;
+                        </button>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="bg-white p-8 rounded-xl shadow text-center text-gray-500">
+                <p class="text-lg">No open bounties right now. Be the first to post one!</p>
+            </div>
+            {% endif %}
+        </section>
+    </div>
+</body>
+</html>
