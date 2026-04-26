@@ -1,5 +1,7 @@
 fastapi[standard]==0.115.0
 supabase==2.3.4
+realtime==1.0.6
+websockets==11.0.3
 stripe==8.5.0
 requests==2.31.0
 jinja2==3.1.3
